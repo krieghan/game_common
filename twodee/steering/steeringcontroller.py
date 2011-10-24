@@ -5,7 +5,7 @@ import sys
 
 from zope.interface import implements, verify
 
-from ai import interfaces
+import interfaces
 
 from twodee.geometry import (vector,
                          calculate,
