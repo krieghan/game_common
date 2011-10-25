@@ -18,11 +18,13 @@ class StateMachine(object):
     def __init__(self,
                  owner,
                  currentState,
-                 globalState=None):
+                 globalState=None,
+                 name=None):
         
         self.owner = owner
         self.currentState = currentState
         self.globalState = globalState
+        self.name = name
         
     def start(self):
         if self.currentState:
@@ -36,6 +38,8 @@ class StateMachine(object):
             self.currentState.exit(self.owner)
         newState.enter(self.owner)        
         self.currentState = newState
+        for observer in self.owner.observers:
+            observer.notifyStateChange(self)
         
     def update(self):
         globalState = self.globalState
