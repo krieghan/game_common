@@ -1,7 +1,7 @@
-from zope.interface import Interface, implements
+import zope.interface
 
-
-class Renderable(Interface):
+class Renderable(zope.interface.Interface):
+    active = zope.interface.Attribute("active")
     def getPosition():
         pass
     
@@ -9,6 +9,12 @@ class Renderable(Interface):
         pass
     
     def getWidth():
+        pass
+
+    def update(timeElapsed):
+        pass
+
+    def draw():
         pass
 
 class Moveable(Renderable):
