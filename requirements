@@ -1,1 +1,4 @@
+PyOpenGL
+PyOpenGL_accelerate
 numpy==1.9.1
+zope.interface
