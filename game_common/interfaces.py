@@ -41,4 +41,19 @@ class Steerable(Moveable):
     def getSteeringController():
         pass
     
-    
+class IWorld(zope.interface.Interface):
+    height = zope.interface.Attribute("height")
+    width = zope.interface.Attribute("width")
+    max_left = zope.interface.Attribute("max_left")
+    max_right = zope.interface.Attribute("max_right")
+    max_top = zope.interface.Attribute("max_top")
+    max_bottom = zope.interface.Attribute("max_bottom")
+
+    def getAllCanvasElements():
+        pass
+
+    def render():
+        pass
+
+    def update(currentTime):
+        pass
