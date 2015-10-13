@@ -47,6 +47,10 @@ class Steerable(Moveable):
     def getSteeringController():
         pass
     
+class Observable(zope.interface.Interface):
+    def getObservers():
+        pass
+
 class IWorld(zope.interface.Interface):
     height = zope.interface.Attribute("height")
     width = zope.interface.Attribute("width")

@@ -38,7 +38,7 @@ class StateMachine(object):
             self.currentState.exit(self.owner)
         newState.enter(self.owner)        
         self.currentState = newState
-        for observer in self.owner.observers:
+        for observer in self.owner.getObservers():
             observer.notifyStateChange(self)
         
     def update(self):
