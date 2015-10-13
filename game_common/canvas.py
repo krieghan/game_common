@@ -27,8 +27,10 @@ class Canvas(object):
         self.timeStep = 1
         self.timeElapsed = self.time_interval / 1000.0
 
+
     def start(self):
         self.InitGL()
+        self.world.start()
         GLUT.glutTimerFunc(self.time_interval, self.handleTime, None)
         GLUT.glutMainLoop()
 

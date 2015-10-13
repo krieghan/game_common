@@ -59,6 +59,9 @@ class IWorld(zope.interface.Interface):
     max_top = zope.interface.Attribute("max_top")
     max_bottom = zope.interface.Attribute("max_bottom")
 
+    def start():
+        pass
+
     def getAllCanvasElements():
         pass
 
@@ -67,3 +70,4 @@ class IWorld(zope.interface.Interface):
 
     def update(currentTime):
         pass
+
