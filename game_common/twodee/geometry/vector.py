@@ -54,6 +54,19 @@ def createVector(magnitude,
     return (round(magnitude * math.cos(direction), 5),
             round(magnitude * math.sin(direction), 5))
 
+def pick_closest_vector(vector_tuple, candidate_vectors):
+    vector_radians = getDirectionRadians(vector_tuple)
+    closest_vector = None
+    closest_difference = None
+    for candidate in candidate_vectors:
+        candidate_radians = getDirectionRadians(candidate)
+        difference = abs(vector_radians - candidate_radians)
+        if closest_difference is None or difference < closest_difference:
+            closest_vector = candidate
+            closest_difference = difference
+
+    return closest_vector
+
 #"Outside" and "Inside" assume a shape that is specified clockwise.
 
 def getPerpVector(vectorTuple):
