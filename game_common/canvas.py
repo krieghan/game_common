@@ -1,4 +1,6 @@
 import sys
+import traceback
+
 from OpenGL import GL, GLU, GLUT
 
 class Canvas(object):
@@ -111,10 +113,15 @@ class Canvas(object):
         self.setupView(width, height)
 
     def handleTime(self, value):
-        currentTime = GLUT.glutGet(GLUT.GLUT_ELAPSED_TIME)
-        self.world.update(currentTime=currentTime)
-        
-        self.render()
+        try:
+            currentTime = GLUT.glutGet(GLUT.GLUT_ELAPSED_TIME)
+            self.world.update(currentTime=currentTime)
+            
+            self.render()
 
-        GLUT.glutTimerFunc(self.time_interval, self.handleTime, None)
+            GLUT.glutTimerFunc(self.time_interval, self.handleTime, None)
+        except:
+            traceback.print_exc()
+            sys.exit()
+
 
