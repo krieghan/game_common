@@ -35,22 +35,22 @@ class StateMachine(object):
     def changeState(self,
                     newState):
         verify.verifyClass(IState, newState)
-        if self.currentState:
-            try:
+        try:
+            if self.currentState:
                 self.currentState.exit(self.owner)
+        except StateChangeFailed:
+            for observer in self.owner.getObservers():
+                observer.notifyStateChangeFailed(self)
+        else:
+            try:
+                newState.enter(self.owner)        
             except StateChangeFailed:
                 for observer in self.owner.getObservers():
                     observer.notifyStateChangeFailed(self)
             else:
-                try:
-                    newState.enter(self.owner)        
-                except StateChangeFailed:
-                    for observer in self.owner.getObservers():
-                        observer.notifyStateChangeFailed(self)
-                else:
-                    self.currentState = newState
-                    for observer in self.owner.getObservers():
-                        observer.notifyStateChange(self)
+                self.currentState = newState
+                for observer in self.owner.getObservers():
+                    observer.notifyStateChange(self)
         
     def update(self):
         globalState = self.globalState
