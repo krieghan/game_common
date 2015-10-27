@@ -10,8 +10,9 @@ class IState(Interface):
     
     def exit(owner):
         pass
-    
-    
+
+class StateChangeFailed(Exception):
+    pass
 
 class StateMachine(object):
     
@@ -35,11 +36,21 @@ class StateMachine(object):
                     newState):
         verify.verifyClass(IState, newState)
         if self.currentState:
-            self.currentState.exit(self.owner)
-        newState.enter(self.owner)        
-        self.currentState = newState
-        for observer in self.owner.getObservers():
-            observer.notifyStateChange(self)
+            try:
+                self.currentState.exit(self.owner)
+            except StateChangeFailed:
+                for observer in self.owner.getObservers():
+                    observer.notifyStateChangeFailed(self)
+            else:
+                try:
+                    newState.enter(self.owner)        
+                except StateChangeFailed:
+                    for observer in self.owner.getObservers():
+                        observer.notifyStateChangeFailed(self)
+                else:
+                    self.currentState = newState
+                    for observer in self.owner.getObservers():
+                        observer.notifyStateChange(self)
         
     def update(self):
         globalState = self.globalState
