@@ -1,7 +1,9 @@
 import zope.interface
 
 class Renderable(zope.interface.Interface):
-    active = zope.interface.Attribute("active")
+    def getActive():
+        pass
+
     def getPosition():
         pass
     
