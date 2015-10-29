@@ -48,18 +48,64 @@ class IndexedPriorityQueue(object):
         del self.priority_by_element[element]
         return (min_element, min_priority)
 
+    def contains(self, element):
+        return self.priority_by_element.get(element) is not None
+
+    def is_empty(self):
+        return bool(self.priority_by_element)
+
 
 
 def get_path_to_target(start_node, target_node):
-    nodes = start_node.get_connected_nodes()
-    heuristic_lowest_cost_so_far = dict()
-    real_costs = dict()
-    heuristic_lowest_cost_so_far[start_node] = 0
-    real_costs[start_node] = 0
-    for node in nodes:
+    closed_set = set()
+    open_set = IndexedPriorityQueue()
 
-
-        
-
+    heuristic_costs = dict()
+    parenting = dict()
+    heuristic_total_cost =\
+            start_node.calculate_heuristic_cost(target_node)
+    heuristic_costs[start_node] = heuristic_total_cost
+    parenting[start_node] = (None, 0)
+    open_set = IndexedPriorityQueue()
+    open_set.enqueue(start_node, heuristic_total_cost)
     
+    while not open_set.is_empty():
+        (current_node, _priority) = open_set.dequeue()
+        if current_node is target_node:
+            break
+        closed_set.add(current_node)
+        _current_parent, current_cost = parenting[current_node]
+        neighbor_cost = current_cost + 1
+        nodes_to_add = start_node.get_connected_nodes()
+        for node_to_add in nodes_to_add:
+            if node_to_add in closed_set:
+                continue
+
+            if not heuristic_costs.has_key(node):
+                heuristic_costs[node] = node.calculate_heuristic_cost(target_node)
+            heuristic_cost = heuristic_costs[node]
+            (current_parent, best_cost_so_far) =\
+                parenting.get(node, (None, None))
+            if best_cost_so_far is None or best_cost_so_far < neighbor_cost:
+                parenting[node] = (current_node, neighbor_cost)
+
+            open_set.enqueue(node, heuristic_cost + neighbor_cost)
+
+    if parenting.get(target_node) is None:
+        return None
+    else:
+        return construct_path(start_node, target_node, parenting)
+
+def construct_path(start_node, target_node, parenting):
+    path = []
+    current_node = target_node
+
+    while current_node is not None:
+        path.append(current_node)
+        current_node = parenting.get(current_node)
+
+    return list(reversed(path))
+
+
+
 
