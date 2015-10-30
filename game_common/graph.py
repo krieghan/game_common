@@ -26,6 +26,12 @@ class Node(object):
     def get_connected_nodes(self):
         return self.nodes
 
+    def get_data(self):
+        return self.data
+
+class NodeTraversalError(Exception):
+    pass
+
 class NodeData(Interface):
     def is_traversable():
         pass
@@ -57,6 +63,9 @@ class IndexedPriorityQueue(object):
 
 
 def get_path_to_target(start_node, target_node):
+    if not start_node.get_data().is_traversable():
+        raise NodeTraversalError('Start node is not traversable')
+
     closed_set = set()
     open_set = IndexedPriorityQueue()
 
@@ -79,6 +88,9 @@ def get_path_to_target(start_node, target_node):
         nodes_to_add = start_node.get_connected_nodes()
         for node_to_add in nodes_to_add:
             if node_to_add in closed_set:
+                continue
+
+            if not node_to_add.get_data().is_traversable():
                 continue
 
             if not heuristic_costs.has_key(node):
