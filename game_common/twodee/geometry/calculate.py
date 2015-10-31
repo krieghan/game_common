@@ -3,10 +3,7 @@
 import math
 
 
-from game_common.twodee.geometry import (
-                         point,
-                         vector,
-                         ray)
+from game_common.twodee.geometry import vector
 
 def multiplyVectorAndScalar(vector,
                             scalar):
