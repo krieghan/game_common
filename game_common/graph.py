@@ -29,11 +29,17 @@ class Node(object):
     def get_data(self):
         return self.data
 
+    def calculate_heuristic_cost(self, target_node):
+        return self.get_data().calculate_heuristic_cost(target_node.get_data())
+
 class NodeTraversalError(Exception):
     pass
 
 class NodeData(Interface):
     def is_traversable():
+        pass
+
+    def calculate_heuristic_cost(target_data):
         pass
 
 class IndexedPriorityQueue(object):
@@ -51,21 +57,18 @@ class IndexedPriorityQueue(object):
                 min_priority = priority
                 min_element = element
 
-        del self.priority_by_element[element]
+        del self.priority_by_element[min_element]
         return (min_element, min_priority)
 
     def contains(self, element):
         return self.priority_by_element.get(element) is not None
 
     def is_empty(self):
-        return bool(self.priority_by_element)
+        return not self.priority_by_element
 
 
 
 def get_path_to_target(start_node, target_node):
-    if not start_node.get_data().is_traversable():
-        raise NodeTraversalError('Start node is not traversable')
-
     closed_set = set()
     open_set = IndexedPriorityQueue()
 
@@ -85,23 +88,24 @@ def get_path_to_target(start_node, target_node):
         closed_set.add(current_node)
         _current_parent, current_cost = parenting[current_node]
         neighbor_cost = current_cost + 1
-        nodes_to_add = start_node.get_connected_nodes()
+        nodes_to_add = current_node.get_connected_nodes()
         for node_to_add in nodes_to_add:
             if node_to_add in closed_set:
                 continue
 
-            if not node_to_add.get_data().is_traversable():
+            if (node_to_add is not target_node and 
+                not node_to_add.get_data().is_traversable()):
                 continue
 
-            if not heuristic_costs.has_key(node):
-                heuristic_costs[node] = node.calculate_heuristic_cost(target_node)
-            heuristic_cost = heuristic_costs[node]
+            if not heuristic_costs.has_key(node_to_add):
+                heuristic_costs[node_to_add] = node_to_add.calculate_heuristic_cost(target_node)
+            heuristic_cost = heuristic_costs[node_to_add]
             (current_parent, best_cost_so_far) =\
-                parenting.get(node, (None, None))
-            if best_cost_so_far is None or best_cost_so_far < neighbor_cost:
-                parenting[node] = (current_node, neighbor_cost)
+                parenting.get(node_to_add, (None, None))
+            if best_cost_so_far is None or best_cost_so_far > neighbor_cost:
+                parenting[node_to_add] = (current_node, neighbor_cost)
 
-            open_set.enqueue(node, heuristic_cost + neighbor_cost)
+            open_set.enqueue(node_to_add, heuristic_cost + neighbor_cost)
 
     if parenting.get(target_node) is None:
         return None
@@ -114,7 +118,7 @@ def construct_path(start_node, target_node, parenting):
 
     while current_node is not None:
         path.append(current_node)
-        current_node = parenting.get(current_node)
+        (current_node, _current_priority) = parenting.get(current_node)
 
     return list(reversed(path))
 
