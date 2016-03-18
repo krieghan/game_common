@@ -1,6 +1,13 @@
 import zope.interface
 
-class Renderable(zope.interface.Interface):
+class Collideable(zope.interface.Interface):
+    def getBoundaries():
+        pass
+
+    def handleCollision(otherElement):
+        pass
+
+class Renderable(Collideable):
     def getActive():
         pass
 

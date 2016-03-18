@@ -2,6 +2,43 @@ from game_common.twodee.geometry import (
                          calculate,
                          vector)
 
+class Circle:
+    pass
+
+class Rectangle:
+    pass
+
+class Polygon:
+    pass
+
+def collidesWith(canvasElement, otherCanvasElement):
+    intersects = False
+    for (boundary_type, boundary) in canvasElement.getBoundaries():
+        if boundary_type is intersect.Circle:
+            boundaryInWorldSpace = (
+                convert.pointToWorldSpace(boundary[0]),
+                boundary[1])
+
+        for (other_boundary_type, 
+             other_boundary) in canvasElement.getBoundaries():
+            if other_boundary_type is intersect.Circle:
+                otherBoundaryInWorldSpace = (
+                    convert.pointToWorldSpace(other_boundary[0]),
+                    other_boundary[1])
+
+            if (boundary_type is intersect.Circle and 
+                other_boundary_type is intersect.Circle):
+                intersects = circleWithCircle(
+                        boundary,
+                        other_boundary)
+                if not intersects:
+                    return False
+
+    return intersects
+
+def circleWithRectangle(circle, rectangle):
+    pass
+
 def circleWithCircle(circle1, circle2):
     position_1, radius_1 = circle1
     position_2, radius_2 = circle2
