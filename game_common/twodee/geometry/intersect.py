@@ -11,33 +11,106 @@ class Rectangle:
 class Polygon:
     pass
 
+    
 def collidesWith(canvasElement, otherCanvasElement):
     intersects = False
-    for (boundary_type, boundary) in canvasElement.getBoundaries():
-        if boundary_type is intersect.Circle:
-            boundaryInWorldSpace = (
-                convert.pointToWorldSpace(boundary[0]),
-                boundary[1])
 
-        for (other_boundary_type, 
-             other_boundary) in canvasElement.getBoundaries():
-            if other_boundary_type is intersect.Circle:
-                otherBoundaryInWorldSpace = (
-                    convert.pointToWorldSpace(other_boundary[0]),
-                    other_boundary[1])
+    boundaries = canvasElement.getBoundaries()
+    other_boundaries = otherCanvasElement.getBoundaries()
 
-            if (boundary_type is intersect.Circle and 
-                other_boundary_type is intersect.Circle):
-                intersects = circleWithCircle(
-                        boundary,
-                        other_boundary)
-                if not intersects:
-                    return False
+    if (Circle in boundaries.keys() and 
+        Circle in other_boundaries.keys())
+        boundary_in_world_space =\
+                convertCircleToWorldSpace(canvasElement)
+        other_boundary_in_world_space =\
+                convertCircleToWorldSpace(otherCanvasElement)
 
-    return intersects
+        intersects = circleWithCircle(
+                boundary_in_world_space,
+                other_boundary_in_world_space)
+        if not intersects:
+            return False
 
+    if (Rectangle in boundaries.keys() and 
+        Rectangle in other_boundaries.keys())
+        boundary_in_world_space =\
+            convertRectangleToWorldSpace(canvasElement)
+        other_boundary_in_world_space =\
+            convertRectangleToWorldSpace(otherCanvasElement)
+
+        intersects = circleWithCircle(
+                boundary_in_world_space,
+                other_boundary_in_world_space)
+        if not intersects:
+            return False
+
+    if (Polygon in boundaries.keys() and
+        Polygon in other_boundaries.keys()):
+        boundary_in_world_space =\
+            convertPolygonToWorldSpace(canvasElement)
+        other_boundary_in_world_space =\
+            convertPolygonToWorldSpace(otherCanvasElement)
+
+        intersects = polygonWithPolygon(
+                boundary_in_world_space,
+                other_boundary_in_world_space)
+        if not intersects:
+            return False
+
+    if Circle in boundaries.keys() and Rectangle in other_boundaries.keys():
+        boundary_in_world_space =\
+            convertCircleToWorldSpace(canvasElement)
+        other_boundary_in_world_space =\
+            convertRectangleToWorldSpace(otherCanvasElement)
+
+        intersects = circleWithRectangle(
+                boundary_in_world_space,
+                other_boundary_in_world_space)
+        if not intersects:
+            return False
+
+    if Rectangle in boundaries.keys() and Circle in other_boundaries.keys():
+        boundary_in_world_space =\
+            convertRectangleToWorldSpace(canvasElement)
+        other_boundary_in_world_space =\
+            convertCircleToWorldSpace(otherCanvasElement)
+
+        intersects = circleWithRectangle(
+                boundary_in_world_space,
+                other_boundary_in_world_space)
+        if not intersects:
+            return False
+        
 def circleWithRectangle(circle, rectangle):
     pass
+
+def rectangleWithPolygon(rectangle, polygon):
+    pass
+
+def circleWithPolygon(circle, polygon):
+    pass
+
+def lineSegmentWithPolygon(line_segment, polygon):
+    pass
+
+def lineSegmentWithCircle(line_segment, circle):
+    pass
+
+def lineSegmentWithRectangle(line_segment, rectangle):
+    pass
+
+def pointInCircle(point, circle):
+    pass
+
+def pointInRectangle(point, rectangle):
+    a, b, c, d = rectangle
+    ap = calculate.subtractPoints(point, a)
+    ab = calculate.subtractPoints(b, a)
+    ad = calculate.subtractPoints(d, a)
+    return (
+        0 <= calculate.dotProduct(ap, ab) <= calculate.dotProduct(ab, ab) and
+        0 <= calculate.dotProduct(ap, ad) <= calculate.dotProduct(ad, ad))
+
 
 def circleWithCircle(circle1, circle2):
     position_1, radius_1 = circle1
@@ -69,7 +142,6 @@ def polygonWithPolygon(polygon1, polygon2):
                 return True
 
     return False
-
 
 def lineWithLine(line1, line2):
     A, B = line1
@@ -104,4 +176,38 @@ def lineWithLine(line1, line2):
                                                         AToIntersectionPoint)
         return intersectionPoint
         
-    
+def convertCircleToWorldSpace(canvasElement):
+    circle = canvasElement.getBoundaries().get(Circle)
+    return (convert.pointToWorldSpace(
+                circle[0],
+                canvasElement.getPosition(),
+                canvasElement.getDirection()),
+            circle[1])
+
+def convertRectangleToWorldSpace(canvasElement):
+    rectangle = canvasElement.getBoundaries().get(Rectangle)
+    return (convert.pointToWorldSpace(
+                rectangle[0],
+                canvasElement.getPosition(),
+                canvasElement.getDirection()),
+            convert.pointToWorldSpace(
+                rectangle[1],
+                canvasElement.getPosition(),
+                canvasElement.getDirection()))
+
+def convertPolygonToWorldSpace(canvasElement):
+    polygon = canvasElement.getBoundaries().get(Polygon)
+    polygon_in_world_space = []
+    for line in polygon:
+        line_in_world_space = (
+            convert.pointToWorldSpace(
+                line[0],
+                canvasElement.getPosition(),
+                canvasElement.getDirection()),
+            convert.pointToWorldSpace(
+                line[1],
+                canvasElement.getPosition(),
+                canvasElement.getDirection()))
+        boundary_in_world_space.append(line_in_world_space)
+    return tuple(polygon_in_world_space)
+
