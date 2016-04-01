@@ -66,10 +66,10 @@ class Line:
         """Having a line return its normal perp vector is vital if we are to do the calculations 
         necessary for this project"""
         if resultant_vector == None:
-            new_vector = self.vector.getPerpVector(self, resultant_vector)
+            new_vector = self.vector.getRightPerpendicular(self, resultant_vector)
             new_vector.normalize()
             return new_vector
         else:
-            resultant_vector = self.vector.getPerpVector(self, resultant_vector=self.vector1)
+            resultant_vector = self.vector.getRightPerpendicular(self, resultant_vector=self.vector1)
             resultant_vector.normalize()
             return resultant_vector

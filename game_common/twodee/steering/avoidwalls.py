@@ -45,7 +45,7 @@ def avoidwalls(agent,
                                                             closestIntersection)
     overshootLength = vector.getMagnitude(intersectionToFeelerEndpoint)
     normalizedWallVector = vector.normalize(wallVector)
-    wallNormal = vector.getPerpVector(normalizedWallVector)
+    wallNormal = vector.getRightPerpendicular(normalizedWallVector)
     steeringForce = calculate.multiplyVectorAndScalar(wallNormal,
                                                       overshootLength)
     

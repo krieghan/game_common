@@ -25,31 +25,31 @@ class TestNormalize(unittest.TestCase):
 class TestGetPerpVector(unittest.TestCase):
     def test_positiveX_positiveY(self):
         startVector = (1, 0)
-        perpVector = vector.getPerpVector(startVector)
+        perpVector = vector.getRightPerpendicular(startVector)
         self.assertEquals((0, -1),
                           perpVector)
         
     def test_negativeX_negativeY(self):
         startVector = (-1, 0)
-        perpVector = vector.getPerpVector(startVector)
+        perpVector = vector.getRightPerpendicular(startVector)
         self.assertEquals((0, 1),
                           perpVector)
         
     def test_positiveY_negativeX(self):
         startVector = (0, 1)
-        perpVector = vector.getPerpVector(startVector)
+        perpVector = vector.getRightPerpendicular(startVector)
         self.assertEquals((1, 0),
                           perpVector)
         
     def test_negativeY_positiveX(self):
         startVector = (0, 1)
-        perpVector = vector.getPerpVector(startVector)
+        perpVector = vector.getRightPerpendicular(startVector)
         self.assertEquals((1, 0),
                           perpVector)
         
     def test_diagonal_xBecomesNegativeY_yBecomesPositiveX(self):
         startVector = (1, 2)
-        perpVector = vector.getPerpVector(startVector)
+        perpVector = vector.getRightPerpendicular(startVector)
         self.assertEquals((2, -1),
                           perpVector)
 

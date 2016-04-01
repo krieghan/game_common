@@ -69,11 +69,11 @@ def pick_closest_vector(vector_tuple, candidate_vectors):
 
 #"Outside" and "Inside" assume a shape that is specified clockwise.
 
-def getPerpVector(vectorTuple):
+def getRightPerpendicular(vectorTuple):
     (x, y) = vectorTuple
     return (y, -x)
 
-def getOtherPerpVector(vectorTuple):
+def getLeftPerpendicular(vectorTuple):
     (x, y) = vectorTuple
     return normalize((-y, x))
     
