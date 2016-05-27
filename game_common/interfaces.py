@@ -7,6 +7,9 @@ class Collideable(zope.interface.Interface):
     def handleCollision(otherElement):
         pass
 
+    def getDirection():
+        pass
+
 class Renderable(Collideable):
     def getActive():
         pass
