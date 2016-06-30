@@ -203,7 +203,7 @@ def rectangleWithRectangle(rectangle1, rectangle2):
 def polygonWithPolygon(polygon1, polygon2):
     for line_from_1 in polygon1:
         for line_from_2 in polygon2:
-            if lineWithLine(line_from_1, line_from_2) is not None:
+            if lineSegmentWithLineSegment(line_from_1, line_from_2) is not None:
                 return True
 
     return False
@@ -215,8 +215,8 @@ def lineSegmentWithLineSegment(line1, line2):
     dVector = calculate.subtractPoints(D, C)
     cVector = calculate.subtractPoints(C, A)
     
-    bperp = vector.getPerpVector(bVector)
-    dperp = vector.getPerpVector(dVector)
+    bperp = vector.getRightPerpendicular(bVector)
+    dperp = vector.getRightPerpendicular(dVector)
     
     dperpDotB = calculate.dotProduct(dperp,
                                      bVector)

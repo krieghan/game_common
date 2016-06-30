@@ -1,6 +1,6 @@
 import unittest
 
-from twodee.geometry import vector
+from game_common.twodee.geometry import vector
 
 
 class TestNormalize(unittest.TestCase):
@@ -18,9 +18,14 @@ class TestNormalize(unittest.TestCase):
         
     def test_normalizeZero(self):
         startVector = (0, 0)
+        newVector = vector.normalize(startVector)
+        self.assertEquals((1, 0),
+                          newVector)
+        '''
         self.assertRaises(vector.InvalidVector,
                           vector.normalize,
                           startVector)
+                          '''
         
 class TestGetPerpVector(unittest.TestCase):
     def test_positiveX_positiveY(self):

@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from twodee.geometry import convert
+from game_common.twodee.geometry import convert
 
 class TestPointToLocalSpace(unittest.TestCase):
     def test_localSpaceIsWorldSpace_pointIsTheSame(self):
@@ -100,5 +100,5 @@ class TestPointToWorldSpace(unittest.TestCase):
         newPoint = convert.pointToWorldSpace(point=(1, -1),
                                              localOrigin=(1, 1),
                                              localDirection=-math.pi / 4)
-        self.assertEquals((0, 0), newPoint)
+        self.assertEquals((1, -.4142), newPoint)
         

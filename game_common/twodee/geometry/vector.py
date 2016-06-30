@@ -42,13 +42,6 @@ def setDirection(vectorTuple,
 def normalize(vectorTuple):
     return setMagnitude(vectorTuple, 1)
 
-def normalizeAndHandle(vectorTuple):
-    try:
-        normalizedVector = normalize(vectorTuple)
-    except InvalidVector:
-        normalizedVector = (1, 0)
-    return normalizedVector
-
 def createVector(magnitude,
                  direction):
     return (round(magnitude * math.cos(direction), 5),

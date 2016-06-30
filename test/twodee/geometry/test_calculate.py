@@ -1,6 +1,6 @@
 import unittest
 
-from twodee.geometry import calculate
+from game_common.twodee.geometry import calculate
 
 class TestMultiplyVectorAndScalar(unittest.TestCase):
     def test_scalarIsZero_vectorIsZero(self):
