@@ -1,8 +1,11 @@
 import unittest
 
-from game_common.twodee.geometry import intersect
+import zope.interface
 
-class TestLineWithLine(unittest.TestCase):
+from game_common.twodee.geometry import intersect
+from game_common import interfaces
+
+class TestLineSegmentWithLineSegment(unittest.TestCase):
     def test_twoParallelLines(self):
         line1 = ((-1, 0), (1, 0))
         line2 = ((-1, 1), (1, 1))
@@ -57,7 +60,158 @@ class TestLineWithLine(unittest.TestCase):
         intersectionPoint = intersect.lineSegmentWithLineSegment(line1,
                                                    line2)
         self.assertTrue(intersectionPoint)
-        
-        
-        
-        
+
+class StubAgentWithBoundaries(object):
+    zope.interface.implements(
+            [interfaces.Collideable])
+
+    def __init__(self, boundaries, direction, position):
+        self.boundaries = boundaries
+        self.direction = direction
+        self.position = position
+
+    def getBoundaries(self):
+        return self.boundaries
+
+    def getDirection(self):
+        return self.direction
+
+    def getPosition(self):
+        return self.position
+
+    def handleCollision(self, otherElement):
+        pass
+    
+
+class RectangleCollidesWithRectangle(unittest.TestCase):
+    def test_identical_rectangles_collide(self):
+        rect_agent1 = StubAgentWithBoundaries(
+                boundaries={intersect.Rectangle : (
+                                (0, 0),
+                                (1, 0),
+                                (1, 1),
+                                (0, 1))},
+                direction=0,
+                position=(0, 0))
+        rect_agent2 = StubAgentWithBoundaries(
+                boundaries={intersect.Rectangle : (
+                                (0, 0),
+                                (1, 0),
+                                (1, 1),
+                                (0, 1))},
+                direction=0,
+                position=(0, 0))
+        self.assertTrue(intersect.collidesWith(
+                            rect_agent1, 
+                            rect_agent2))
+
+
+    def test_two_rectangles_collide(self):
+        rect_agent1 = StubAgentWithBoundaries(
+                boundaries={intersect.Rectangle : (
+                                (0, 0),
+                                (1, 0),
+                                (1, 1),
+                                (0, 1))},
+                direction=0,
+                position=(0, 0))
+        rect_agent2 = StubAgentWithBoundaries(
+                boundaries={intersect.Rectangle : (
+                                (0, 0),
+                                (1, 0),
+                                (1, 1),
+                                (0, 1))},
+                direction=0,
+                position=(1, 1))
+        self.assertTrue(intersect.collidesWith(
+                            rect_agent1, 
+                            rect_agent2))
+
+    def test_two_rectangles_do_not_collide(self):
+        rect_agent1 = StubAgentWithBoundaries(
+                boundaries={intersect.Rectangle : (
+                                (0, 0),
+                                (1, 0),
+                                (1, 1),
+                                (0, 1))},
+                direction=0,
+                position=(0, 0))
+        rect_agent2 = StubAgentWithBoundaries(
+                boundaries={intersect.Rectangle : (
+                                (0, 0),
+                                (1, 0),
+                                (1, 1),
+                                (0, 1))},
+                direction=0,
+                position=(2, 2))
+        self.assertFalse(intersect.collidesWith(
+                            rect_agent1, 
+                            rect_agent2))
+
+class CircleCollidesWithCircle(unittest.TestCase):
+    def test_identical_circles_collide(self):
+        circle_agent1 = StubAgentWithBoundaries(
+                boundaries={intersect.Circle : ((0, 0), 1)},
+                direction=0,
+                position=(0, 0))
+        circle_agent2 = StubAgentWithBoundaries(
+                boundaries={intersect.Circle : ((0, 0), 1)},
+                direction=0,
+                position=(0, 0))
+        self.assertTrue(intersect.collidesWith(
+                            circle_agent1, 
+                            circle_agent2))
+         
+    def test_two_circles_collide(self):
+        circle_agent1 = StubAgentWithBoundaries(
+                boundaries={intersect.Circle : ((0, 0), 1)},
+                direction=0,
+                position=(0, 0))
+        circle_agent2 = StubAgentWithBoundaries(
+                boundaries={intersect.Circle : ((0, 0), 1)},
+                direction=0,
+                position=(0, .5))
+        self.assertTrue(intersect.collidesWith(
+                            circle_agent1, 
+                            circle_agent2))
+
+    def test_two_circles_dont_collide(self):
+        circle_agent1 = StubAgentWithBoundaries(
+                boundaries={intersect.Circle : ((0, 0), 1)},
+                direction=0,
+                position=(0, 0))
+        circle_agent2 = StubAgentWithBoundaries(
+                boundaries={intersect.Circle : ((0, 0), 1)},
+                direction=0,
+                position=(0, 2))
+        self.assertFalse(intersect.collidesWith(
+                            circle_agent1, 
+                            circle_agent2))
+
+class PolygonCollidesWithPolygon(unittest.TestCase):
+    def test_identical_octagons_collide(self):
+        oct_agent1 = StubAgentWithBoundaries(
+            boundaries={intersect.Polygon : ((1, 2),
+                                             (2, 1),
+                                             (2, -1),
+                                             (1, -2),
+                                             (-1, -2),
+                                             (-2, -1),
+                                             (-2, 1),
+                                             (-1, 2))},
+            direction=0,
+            position=(0, 0))
+        oct_agent2 = StubAgentWithBoundaries(
+            boundaries={intersect.Polygon : ((1, 2),
+                                             (2, 1),
+                                             (2, -1),
+                                             (1, -2),
+                                             (-1, -2),
+                                             (-2, -1),
+                                             (-2, 1),
+                                             (-1, 2))},
+            direction=0,
+            position=(0, 0))
+        self.assertTrue(intersect.collidesWith(
+                            oct_agent1, 
+                            oct_agent2))

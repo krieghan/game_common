@@ -1,9 +1,12 @@
 import math
 
+from zope.interface import verify
+
 from game_common.twodee.geometry import (
                          calculate,
                          convert,
                          vector)
+from game_common import interfaces
 
 class Circle:
     pass
@@ -13,9 +16,11 @@ class Rectangle:
 
 class Polygon:
     pass
-
     
 def collidesWith(canvasElement, otherCanvasElement):
+    verify.verifyObject(interfaces.Collideable, canvasElement)
+    verify.verifyObject(interfaces.Collideable, otherCanvasElement)
+
     intersects = None
 
     boundaries = canvasElement.getBoundaries()
@@ -44,7 +49,7 @@ def collidesWith(canvasElement, otherCanvasElement):
         other_boundary_in_world_space =\
             convertRectangleToWorldSpace(otherCanvasElement)
 
-        intersects = circleWithCircle(
+        intersects = rectangleWithRectangle(
                 boundary_in_world_space,
                 other_boundary_in_world_space)
         if not intersects:
@@ -194,8 +199,8 @@ def rectangleWithRectangle(rectangle1, rectangle2):
         a2[0] > c1[0]):
         return False
 
-    if (a1[1] < c2[1] or 
-        a2[1] < c1[1]):
+    if (a1[1] > c2[1] or 
+        a2[1] > c1[1]):
         return False
 
     return True
@@ -271,6 +276,7 @@ def convertRectangleToWorldSpace(canvasElement):
  )
 
 def convertPolygonToWorldSpace(canvasElement):
+    import pdb; pdb.set_trace()
     polygon = canvasElement.getBoundaries().get(Polygon)
     polygon_in_world_space = []
     for line in polygon:

@@ -10,6 +10,9 @@ class Collideable(zope.interface.Interface):
     def getDirection():
         pass
 
+    def getPosition():
+        pass
+
 class Renderable(Collideable):
     def getActive():
         pass
