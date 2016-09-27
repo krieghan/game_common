@@ -5,7 +5,10 @@ from OpenGL import GL, GLU, GLUT
 
 class Canvas(object):
     def __init__(self,
-                 world):
+                 world,
+                 title='',
+                 height=500,
+                 width=500):
         self.world = world
         self.time_interval = 10
         GLUT.glutInit(sys.argv)
@@ -13,8 +16,8 @@ class Canvas(object):
         GLUT.glutInitDisplayMode(GLUT.GLUT_DOUBLE | 
                                  GLUT.GLUT_RGB | 
                                  GLUT.GLUT_DEPTH)
-        GLUT.glutInitWindowSize(500,500)
-        GLUT.glutCreateWindow('Tiles')
+        GLUT.glutInitWindowSize(height, width)
+        GLUT.glutCreateWindow(title)
         GLUT.glutDisplayFunc(self.render)
         GLUT.glutReshapeFunc(self.onSize)
 

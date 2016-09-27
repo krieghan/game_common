@@ -13,13 +13,13 @@ class Collideable(zope.interface.Interface):
     def getPosition():
         pass
 
-class Renderable(Collideable):
+class Renderable(zope.interface.Interface):
     def getActive():
         pass
 
     def getPosition():
         pass
-    
+
     def getLength():
         pass
     
