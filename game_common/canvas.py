@@ -32,7 +32,6 @@ class Canvas(object):
         self.timeStep = 1
         self.timeElapsed = self.time_interval / 1000.0
 
-
     def start(self):
         self.InitGL()
         self.world.start()
@@ -62,8 +61,7 @@ class Canvas(object):
         
         """
         
-        world_height = self.world.height 
-        world_width = self.world.width  
+        world_height, world_width = self.world.getHeightWidth()
         
         #The ratio of the width to the height in the client-area
         screenratio = float(client_width) / float(client_height)
@@ -95,10 +93,7 @@ class Canvas(object):
         
         GL.glMatrixMode(GL.GL_PROJECTION)
         GL.glLoadIdentity()
-        GLU.gluOrtho2D(self.world.max_left, 
-                       self.world.max_right, 
-                       self.world.max_bottom, 
-                       self.world.max_top)
+        GLU.gluOrtho2D(*self.world.getMaxLeftRightBottomTop())
 
     def render(self):
         GL.glClear(GL.GL_COLOR_BUFFER_BIT)       

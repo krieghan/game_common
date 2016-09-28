@@ -30,9 +30,8 @@ class Overlap:
     pass
     
 def collidesWith(canvasElement, otherCanvasElement):
-    verify.verifyObject(interfaces.Collideable, canvasElement)
-    verify.verifyObject(interfaces.Collideable, otherCanvasElement)
-
+    # canvasElement and otherCanvasElement must both implement
+    # the Collideable interface
     intersects = None
 
     boundaries = canvasElement.getBoundaries()

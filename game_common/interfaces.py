@@ -67,13 +67,6 @@ class Observable(zope.interface.Interface):
         pass
 
 class IWorld(zope.interface.Interface):
-    height = zope.interface.Attribute("height")
-    width = zope.interface.Attribute("width")
-    max_left = zope.interface.Attribute("max_left")
-    max_right = zope.interface.Attribute("max_right")
-    max_top = zope.interface.Attribute("max_top")
-    max_bottom = zope.interface.Attribute("max_bottom")
-
     def start():
         pass
 
@@ -86,3 +79,8 @@ class IWorld(zope.interface.Interface):
     def update(currentTime):
         pass
 
+    def getHeightWidth():
+        pass
+
+    def getMaxLeftRightBottomTop():
+        pass
