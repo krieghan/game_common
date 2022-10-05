@@ -1,4 +1,4 @@
-import flee
+from . import flee
 
 from game_common.twodee.geometry import (
                          calculate,

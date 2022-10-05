@@ -1,5 +1,5 @@
 from game_common.twodee.geometry import (calculate)
-import seek
+from . import seek
 
 def cohere(agent, 
            neighbors):

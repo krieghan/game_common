@@ -99,7 +99,7 @@ def addPoints(point1, point2, resultant_point=None):
     (x2, y2) = point2.getXAndY()
     
     if resultant_point == None:
-        print "AddPoints: Instantiating New Point to Return"
+        print("AddPoints: Instantiating New Point to Return")
         return Point(x1 + x2, y1 + y2)
     else:
         resultant_point.setXAndY(x1 + x2, y1 + y2)
@@ -110,7 +110,7 @@ def averagePoints(point1, point2, resultant_point=None):
     (x2, y2) = point2.getXAndY()
     
     if resultant_point == None:
-        print "AveragePoints: Instantiating New Point to Return"
+        print("AveragePoints: Instantiating New Point to Return")
         return Point((x1 + x2) / 2.0, (y1 + y2) / 2.0)
     else:
         resultant_point.setXAndY((x1 + x2) / 2.0, (y1 + y2) / 2.0)
