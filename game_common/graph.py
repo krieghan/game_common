@@ -97,15 +97,19 @@ def get_path_to_target(start_node, target_node):
                 not node_to_add.get_data().is_traversable()):
                 continue
 
-            if not heuristic_costs.has_key(node_to_add):
-                heuristic_costs[node_to_add] = node_to_add.calculate_heuristic_cost(target_node)
-            heuristic_cost = heuristic_costs[node_to_add]
+            heuristic_cost_for_node = heuristic_costs.get(node_to_add)
+            if heuristic_cost_for_node is None:
+                heuristic_cost_for_node =\
+                    heuristic_costs[node_to_add] =\
+                        node_to_add.calculate_heuristic_cost(target_node)
             (current_parent, best_cost_so_far) =\
                 parenting.get(node_to_add, (None, None))
             if best_cost_so_far is None or best_cost_so_far > neighbor_cost:
                 parenting[node_to_add] = (current_node, neighbor_cost)
 
-            open_set.enqueue(node_to_add, heuristic_cost + neighbor_cost)
+            open_set.enqueue(
+                node_to_add,
+                heuristic_cost_for_node + neighbor_cost)
 
     if parenting.get(target_node) is None:
         return None
