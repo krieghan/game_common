@@ -8,6 +8,7 @@ from game_common.twodee.geometry import (
                          vector)
 from game_common import interfaces
 
+
 # Shapes
 class Circle:
     pass
@@ -23,12 +24,15 @@ class Polygon:
 class Parallel:
     pass
 
+
 class Intersect:
     pass
+
 
 class Overlap:
     pass
     
+
 def collidesWith(canvasElement, otherCanvasElement):
     # canvasElement and otherCanvasElement must both implement
     # the Collideable interface
@@ -107,6 +111,7 @@ def collidesWith(canvasElement, otherCanvasElement):
         raise NotImplementedError("%s and %s" % (boundaries, other_boundaries))
 
     return intersects
+
         
 def circleWithRectangle(circle, rectangle):
     collides = circleWithPolygon(
@@ -126,6 +131,7 @@ def rectangleWithPolygon(rectangle, polygon):
             makePolygonFromPoints(rectangle),
             polygon)
 
+
 def circleWithPolygon(circle, polygon):
     for line_segment in polygon:
         if lineSegmentWithCircle(
@@ -133,6 +139,7 @@ def circleWithPolygon(circle, polygon):
                 circle):
             return True
     return False
+
 
 def lineSegmentWithPolygon(line_segment, polygon):
     for polygon_line_segment in polygon:
@@ -142,6 +149,7 @@ def lineSegmentWithPolygon(line_segment, polygon):
             return True
 
     return False
+
 
 def lineWithCircle(line, circle):
     circle_point, circle_radius = circle
@@ -181,15 +189,18 @@ def lineSegmentWithCircle(line_segment, circle):
     a_onto_b = calculate.dotProduct(a, vector.normalize(b))
     return math.pow(a_onto_b, 2) <= vector.getMagnitudeSquared(b)
 
+
 def lineSegmentWithRectangle(line_segment, rectangle):
     return lineSegmentWithPolygon(
             line_segment,
             makePolygonFromPoints(rectangle))
 
+
 def pointInCircle(point, circle):
     circle_point, circle_radius = circle
     point_to_circle = calculate.subtractPoints(circle_point, point)
     return vector.getMagnitudeSquared(point_to_circle) <= math.pow(circle_radius, 2)
+
 
 def pointInRectangle(point, rectangle):
     a, b, c, d = rectangle
@@ -199,6 +210,7 @@ def pointInRectangle(point, rectangle):
     return (
         0 <= calculate.dotProduct(ap, ab) <= calculate.dotProduct(ab, ab) and
         0 <= calculate.dotProduct(ap, ad) <= calculate.dotProduct(ad, ad))
+point_in_rectangle = pointInRectangle
 
 
 def circleWithCircle(circle1, circle2):
@@ -209,6 +221,7 @@ def circleWithCircle(circle1, circle2):
     actual_distance_squared = vector.getMagnitudeSquared(
             circle1_to_circle2)
     return actual_distance_squared < bounding_distance_squared
+
 
 def rectangleWithRectangle(rectangle1, rectangle2):
     a1, b1, c1, d1 = rectangle1
@@ -224,6 +237,7 @@ def rectangleWithRectangle(rectangle1, rectangle2):
 
     return True
 
+
 def polygonWithPolygon(polygon1, polygon2):
     for line_from_1 in polygon1:
         for line_from_2 in polygon2:
@@ -232,11 +246,13 @@ def polygonWithPolygon(polygon1, polygon2):
 
     return False
 
+
 def pointWithLine(point_c, line):
     point_a, point_b = line
     #If the slopes are equal, the point is on the line
     return ((point_c[1] - point_a[1]) * (point_b[0] - point_a[0]) == 
             (point_b[1] - point_a[1]) * (point_c[0] - point_a[0]))
+
 
 def pointWithLineSegment(point_c, line_segment):
     if not pointWithLine(point_c, line_segment):
@@ -249,12 +265,14 @@ def pointWithLineSegment(point_c, line_segment):
     return (vector.getMagnitude(ac) + vector.getMagnitude(cb) == 
             vector.getMagnitude(ab))
 
+
 def lineSegmentWithLineSegment(line1, line2):
     point = getLineSegmentIntersection(line1, line2)
     if point is not None:
         return True
 
     return lineSegmentsOverlap(line1, line2)
+
 
 def linesAreParallel(line1, line2):
     A, B = line1
@@ -270,16 +288,19 @@ def linesAreParallel(line1, line2):
     
     return cdperp_dot_ab == 0
 
+
 def linesAreIdentical(line1, line2):
     point_a, point_b = line1
     return (linesAreParallel(line1, line2) and 
             pointWithLine(point_a, line2))
+
 
 def lineSegmentsOverlap(line1, line2):
     point_a, point_b = line1
     return (linesAreIdentical(line1, line2) and 
             (pointWithLineSegment(point_a, line2) or
              pointWithLineSegment(point_b, line2)))
+
 
 def getLineSegmentIntersection(line1, line2):
     if linesAreParallel(line1, line2):
@@ -315,6 +336,7 @@ def getLineSegmentIntersection(line1, line2):
     else:
         return None
         
+
 def convertCircleToWorldSpace(canvasElement):
     circle = canvasElement.getBoundaries().get(Circle)
     return (convert.pointToWorldSpace(
@@ -322,6 +344,7 @@ def convertCircleToWorldSpace(canvasElement):
                 canvasElement.getPosition(),
                 canvasElement.getDirection()),
             circle[1])
+
 
 def convertRectangleToWorldSpace(canvasElement):
     rectangle = canvasElement.getBoundaries().get(Rectangle)
@@ -344,6 +367,7 @@ def convertRectangleToWorldSpace(canvasElement):
 
     )
 
+
 def convertPolygonToWorldSpace(canvasElement):
     polygon = canvasElement.getBoundaries().get(Polygon)
     polygon_in_world_space = []
@@ -360,6 +384,7 @@ def convertPolygonToWorldSpace(canvasElement):
         polygon_in_world_space.append(line_in_world_space)
     return tuple(polygon_in_world_space)
 
+
 def makePolygonFromPoints(points):
     line_segments = []
     len_points = len(points)
@@ -369,5 +394,3 @@ def makePolygonFromPoints(points):
             points[(i + 1) % len_points]))
 
     return line_segments
-
-

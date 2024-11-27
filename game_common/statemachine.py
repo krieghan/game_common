@@ -1,5 +1,7 @@
 from zope.interface import Interface, verify
 
+from . import interfaces
+
 class IState(Interface):
    
     def enter(owner):
@@ -11,33 +13,36 @@ class IState(Interface):
     def exit(owner):
         pass
 
+
 class StateChangeFailed(Exception):
     pass
+
 
 class StateMachine(object):
     
     def __init__(self,
                  owner,
-                 currentState,
-                 globalState=None,
+                 current_state=None,
+                 global_state=None,
                  name=None):
-        
+        verify.verifyObject(
+            interfaces.Observable,
+            owner)
         self.owner = owner
-        self.currentState = currentState
-        self.globalState = globalState
         self.name = name
+        self.current_state = current_state
+        self.global_state = global_state
         
     def start(self):
-        if self.currentState:
-            self.currentState.enter(self.owner)
+        if self.current_state:
+            self.current_state.enter(self.owner)
         
-    
-    def changeState(self,
+    def change_state(self,
                     newState):
         verify.verifyClass(IState, newState)
         try:
-            if self.currentState:
-                self.currentState.exit(self.owner)
+            if self.current_state:
+                self.current_state.exit(self.owner)
         except StateChangeFailed:
             for observer in self.owner.getObservers():
                 observer.notifyStateChangeFailed(self)
@@ -48,14 +53,14 @@ class StateMachine(object):
                 for observer in self.owner.getObservers():
                     observer.notifyStateChangeFailed(self)
             else:
-                self.currentState = newState
+                self.current_state = newState
                 for observer in self.owner.getObservers():
                     observer.notifyStateChange(self)
         
     def update(self):
-        globalState = self.globalState
-        if globalState:
-            globalState.execute(self.owner)
-        if self.currentState:
-            self.currentState.execute(self.owner)
+        global_state = self.global_state
+        if global_state:
+            global_state.execute(self.owner)
+        if self.current_state:
+            self.current_state.execute(self.owner)
         

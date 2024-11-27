@@ -95,8 +95,17 @@ class Canvas(object):
         GL.glLoadIdentity()
         GLU.gluOrtho2D(*self.world.getMaxLeftRightBottomTop())
 
+    def transform_click(self, x, y):
+        client_width, client_height = self.getClientSizeTuple()
+        world_height, world_width = self.world.getHeightWidth()
+        y_ratio = self.viewport_height / world_height
+        x_ratio = self.viewport_width / world_width
+        transformed_x = (x - self.viewport_left) / x_ratio
+        transformed_y = (client_height - (y + self.viewport_bottom)) / y_ratio
+        return (transformed_x, transformed_y)
+
     def render(self):
-        GL.glClear(GL.GL_COLOR_BUFFER_BIT)       
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT)
         GL.glMatrixMode(GL.GL_MODELVIEW)
         GL.glLoadIdentity()
 
@@ -112,8 +121,8 @@ class Canvas(object):
 
     def handleTime(self, value):
         try:
-            currentTime = GLUT.glutGet(GLUT.GLUT_ELAPSED_TIME)
-            self.world.update(currentTime=currentTime)
+            current_time = GLUT.glutGet(GLUT.GLUT_ELAPSED_TIME)
+            self.world.update(current_time=current_time)
             
             self.render()
 
